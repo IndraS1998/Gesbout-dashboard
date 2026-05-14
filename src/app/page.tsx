@@ -19,6 +19,7 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginForm>()
+
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
     setLoading(true)
     try {
@@ -106,10 +107,11 @@ export default function LoginPage() {
           <div className="login-forgot"><a href="#">Mot de passe oublié ?</a></div>
 
           <button
-            className="btn btn-primary btn-full"
+            className={`btn btn-primary btn-full`}
             type='submit'
             disabled={loading}
           >
+            {loading && <div className='spinner'></div>}
             {loading?'Chargement...':'Se connecter'}
           </button>
           <div className="login-footer">

@@ -1,0 +1,128 @@
+.topnav {
+    background: white;
+    border-bottom: 1px solid #e2e6ef;
+    padding: 0 1.5rem;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .navBrand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .navBrandIcon {
+    width: 36px;
+    height: 36px;
+
+    border-radius: 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(135deg, #4e598c, #6a77aa);
+
+    color: white;
+    font-weight: 700;
+  }
+
+  .navBrandName {
+    display: block;
+    color: #4e598c;
+    font-weight: 700;
+  }
+
+  .navBrandSub {
+    display: block;
+    font-size: 0.68rem;
+    color: #8892aa;
+    text-transform: uppercase;
+  }
+
+  .navRight {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .navUser {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .navAvatar {
+    width: 32px;
+    height: 32px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(135deg, #fcaf58, #ff8c42);
+
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .golombeMark {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.4rem 0.875rem;
+
+    border-radius: 8px;
+
+    background: #eef0f8;
+
+    color: #4e598c;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .golombeRing {
+    width: 22px;
+    height: 22px;
+
+    border: 3px solid #4e598c;
+    border-radius: 50%;
+
+    position: relative;
+  }
+
+  .golombeRing::after {
+    content: "";
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #4e598c;
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+  }
+
+  .adminName{
+    font-size: 0.88rem;
+    color: #4a5168;
+  }
