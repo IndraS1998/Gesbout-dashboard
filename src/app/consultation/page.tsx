@@ -1,15 +1,16 @@
 "use client";
-import { useState,useEffect,useRef,useCallback } from "react";
+import { useState,useEffect,useCallback } from "react";
 import {useRouter} from "next/navigation";
 import styles from "./page.module.css";
 import Nav from "@/components/nav/component";
 import Card from "@/components/card/components";
 import DownlineAccordion from "@/components/downlineCard/component";
 import {insertCharacter,printDate} from "@/context/utilityFunctions";
-import type {Client,Params,TotalSales,Article,PurchaseWithClient,DetailPerAr} from '@/context/types';
+import type {Client,Params,TotalSales,Article,PurchaseWithClient,DetailPerAr,BoolSetter} from '@/context/types';
 import toast from 'react-hot-toast';
 import LoadingOverlay from '@/components/loadingOverlay/component';
 import { useForm, useWatch } from "react-hook-form";
+import {generatePDF} from "@/scripts/functions";
 
 type FilterForm = {
   client: string;
@@ -31,13 +32,9 @@ export default function ConsultationPage() {
   const [palier,setPalier] = useState<string>('');
   const [details,setDetails] = useState<DetailPerAr[]>();
   const [loadingPdf,setLoadingPdf] = useState<boolean>();
+  const [printLoadPdf,setPrintLoadPdf] = useState<boolean>();
   const [downlineSubs,setDownlineSubs] = useState<number>(0)
-  const primaryColorPdf : [number,number,number] = [73,80,87];
-  const secondaryColorPdf : [number, number, number]= [108,117,125];
-  const yellow : [number,number,number] = [201,162,39];
-  const green : [number,number,number] = [64,145,108];
-  const darkTextPdf : [number,number,number] = [33,37,41];
-  const lightTextPdf : [number,number,number] = [248,249,250];
+
   const {
       register,
       handleSubmit,
@@ -132,6 +129,12 @@ export default function ConsultationPage() {
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  function printMiddleware(operation:string,loader:BoolSetter){
+    if(clientInfo && systemParams && totalSales && articlesSold && clientSubscriptions && downlinePurchases && palier && downlineSubs && details){
+      generatePDF(startDate,endDate,clientInfo,systemParams,totalSales,articlesSold,clientSubscriptions,downlinePurchases,palier,downlineSubs,details,loader,operation)
+    }
+  }
 
   return (
     <>
@@ -505,12 +508,14 @@ export default function ConsultationPage() {
               <div className="card-body">
                 <div className="actions-bar">
                   <span className="ts">Rapport généré le <strong id="gen-date">{d.toLocaleDateString("fr-Fr")}</strong> &mdash; {clientInfo?.nom}</span>
-                  <button className="btn btn-print" onClick={() => {}}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  <button className="btn btn-print" onClick={() => {printMiddleware('PRINT',setPrintLoadPdf)}}>
+                    {!printLoadPdf && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>}
+                    {printLoadPdf && <div className='spinner'></div>}
                     Imprimer
                   </button>
-                  <button className="btn btn-pdf" onClick={() => {}}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <button className="btn btn-pdf" onClick={() => {printMiddleware('DOWNLOAD',setLoadingPdf)}}>
+                    {!loadingPdf && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>}
+                    {loadingPdf && <div className='spinner'></div>}
                     Export PDF
                   </button>
                   <button className="btn btn-excel" onClick={() => {}}>

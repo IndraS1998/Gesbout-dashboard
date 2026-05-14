@@ -1,3 +1,4 @@
+import React from 'react';
 
 export type Client = {
     id_client: string;
@@ -48,3 +49,5 @@ export type DetailPerAr = {
     valpvar: string;
     valar: string;
 }
+
+export type BoolSetter = React.Dispatch<React.SetStateAction<boolean>>;
