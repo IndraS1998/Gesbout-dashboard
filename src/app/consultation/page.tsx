@@ -31,8 +31,8 @@ export default function ConsultationPage() {
   const [downlinePurchases,setdownlinePurchases] = useState<PurchaseWithClient[]>();
   const [palier,setPalier] = useState<string>('');
   const [details,setDetails] = useState<DetailPerAr[]>();
-  const [loadingPdf,setLoadingPdf] = useState<boolean>();
-  const [printLoadPdf,setPrintLoadPdf] = useState<boolean>();
+  const [loadingPdf,setLoadingPdf] = useState<boolean>(false);
+  const [printLoadPdf,setPrintLoadPdf] = useState<boolean>(false);
   const [downlineSubs,setDownlineSubs] = useState<number>(0)
 
   const {
@@ -526,7 +526,7 @@ export default function ConsultationPage() {
               </div>
             </div>
           </>}
-          {!dataFetched && <>
+          {!dataFetched && (<>
               {/* PLACEHOLDER */}
               <div className="card">
                 <div className="placeholder">
@@ -535,7 +535,7 @@ export default function ConsultationPage() {
                   <div className="ph-text">Sélectionnez un client et une période, puis cliquez sur <strong>Rechercher</strong>.</div>
                 </div>
               </div>
-            </>
+            </>)
           }
         </main>
       </div>

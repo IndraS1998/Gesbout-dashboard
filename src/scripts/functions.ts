@@ -155,7 +155,8 @@ export const generatePDF = (startDate:string,endDate:string,clientInfo:Client,sy
     // Add Footer
     doc.setFontSize(10);
     doc.setTextColor(darkTextPdf[0],darkTextPdf[1],darkTextPdf[2]);
-    doc.text(`Page ${doc.internal.getNumberOfPages()}`, 105, 295, { align: "center" });
+    const pages = doc.getNumberOfPages?.() ?? doc.internal.pages.length - 1;
+    doc.text(`Page ${pages}`, 105, 295, { align: "center" });
 
     if(op=='DOWNLOAD'){
       // Save PDF
