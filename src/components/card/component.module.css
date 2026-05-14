@@ -1,0 +1,94 @@
+.card {
+  background: white;
+  border: 1px solid #e2e6ef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.cardHeader {
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f2f7;
+  cursor: pointer;
+}
+
+.cardHeader:hover {
+  background: #f5f7fb;
+  transition: ease-in-out 0.1s;
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.cardIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icBlue {
+  background: #eef0f8;
+  color: #4e598c;
+}
+
+.cardTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.cardSubtitle {
+  font-size: 0.72rem;
+  color: #8892aa;
+}
+
+.toggleBtn {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+  transition: 0.2s;
+  color: #667085;
+}
+
+.toggleBtn:hover {
+  background: #f5f7fb;
+}
+
+.cardBodyWrapper {
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.25s ease;
+}
+
+.open {
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.closed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.cardBody {
+  padding: 1.25rem;
+}

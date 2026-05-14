@@ -1,0 +1,62 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.35);
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  pointer-events: all;
+}
+
+.loaderBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+
+  padding: 1.5rem 2rem;
+
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.8);
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.spinner {
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  border: 4px solid rgba(252, 175, 88, 0.2);
+  border-top-color: var(--accent2);
+
+  animation: spin 0.8s linear infinite;
+}
+
+.text {
+  margin: 0;
+
+  font-size: 0.92rem;
+  font-weight: 600;
+
+  color: var(--gray-700);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
