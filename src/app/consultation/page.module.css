@@ -95,7 +95,6 @@
   }
 }
 
-
 .fgroup {
   display: flex;
   flex-direction: column;
@@ -103,30 +102,50 @@
 
 .flabel {
   margin-bottom: 0.35rem;
-
   font-size: 0.72rem;
   font-weight: 700;
-
   text-transform: uppercase;
-
   color: #8892aa;
 }
 
 .finput,
 .fselect {
-  width:100%;
-  padding:.6rem .875rem;
-  border:1.5px solid var(--gray-200);
-  border-radius:var(--radius-sm);
-  font-family:var(--font);
-  font-size:.875rem;
-  color:var(--gray-900);
-  background:var(--white);
-  min-height:40px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: .6rem .875rem;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: .875rem;
+  color: var(--gray-900);
+  background: var(--white);
+
+  min-height: 40px;
+  line-height: 1.2;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
     background-color 0.2s ease;
+}
+
+/* ✅ iOS Safari fix for date inputs overflowing/ignoring width */
+.finput[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* keeps it behaving like other inputs inside grid/flex */
+  display: block;
+
+  /* reduces chance of internal UI causing overflow */
+  padding-right: .6rem;
+}
+
+/* Optional: keep displayed date text aligned nicely on iOS */
+.finput[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
 }
 
 .fselect:hover {
