@@ -39,7 +39,8 @@ export default function ConsultationPage() {
       register,
       handleSubmit,
       reset,
-      control
+      control,
+      formState: { errors }
     } = useForm<FilterForm>({
       defaultValues: {
         client: "",
@@ -187,7 +188,7 @@ export default function ConsultationPage() {
 
                   <select
                     className={styles.fselect}
-                    {...register("client")}
+                    {...register("client",{required: "Veuillez sélectionner un client"})}
                   >
                     <option value="">Sélectionner un client</option>
 
@@ -210,7 +211,7 @@ export default function ConsultationPage() {
                   <input
                     className={styles.finput}
                     type="date"
-                    {...register("startDate")}
+                    {...register("startDate",{required: "La date de début est requise" })}
                   />
                 </div>
 
@@ -222,7 +223,7 @@ export default function ConsultationPage() {
                   <input
                     className={styles.finput}
                     type="date"
-                    {...register("endDate")}
+                    {...register("endDate",{required: "La date de fin est requise"})}
                   />
                 </div>
 
@@ -439,7 +440,7 @@ export default function ConsultationPage() {
             >
               <div className="card-body collapse open">
                 {/* PV + Parrainage summary */}
-                <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'.875rem',marginBottom:'1.25rem'}} className="params-bar">
+                <div className="params-bar">
                   <div className="param-box"><div className="pk">Prime Parrainage</div><div className="pv">{insertCharacter((downlinePurchases?.reduce((acc,dn)=>acc+(dn.purchases.reduce((a,p)=>a+(p.qte*p.points),0)),0) ?? '0').toString())}<span style={{fontSize:'.72rem',opacity:'.65'}}> FCFA</span></div><div className="psub">Inclus dans la ristourne</div></div>
                   <div className="param-box"><div className="pk">Parrainages Downlines</div><div className="pv">{systemParams
                     ?insertCharacter((downlineSubs * Number(systemParams.valabonnement ?? 0)).toString())
@@ -492,7 +493,17 @@ export default function ConsultationPage() {
                       (downlineSubs * Number(systemParams.valabonnement ?? 0) +
                       +((clientInfo.d_creation >= startDate && clientInfo.d_creation <= endDate) ? systemParams.valabonnementpropre:0))
                     ).toString()):'NA'}<span className="rist-cur">F CFA</span></div>
-                    <div className="rist-meta">{clientInfo?.nom} &bull; {clientInfo?.numtel} &bull; Période : {startDate} → {endDate}</div>
+                    <div className="rist-meta">
+                      <span>{clientInfo?.nom}</span>
+                      <span className="rist-sep">•</span>
+
+                      <span>{clientInfo?.numtel}</span>
+                      <span className="rist-sep">•</span>
+
+                      <span>
+                        Période : {startDate} → {endDate}
+                      </span>
+                    </div>
                   </div>
                   <div className="rist-badges">
                     <div className="rist-badge"><div className="rb-lbl">Total PV</div><div className="rb-val">{articlesSold && downlinePurchases &&clientSubscriptions?insertCharacter((downlinePurchases.reduce((acc,dn)=>acc+(dn.purchases.reduce((a,p)=>a+(p.qte*p.points),0)),0) + (clientSubscriptions.length * 35) + articlesSold.reduce((acc,article)=> acc + (article.qte * article.points),0)).toString()):"NA"}</div></div>
