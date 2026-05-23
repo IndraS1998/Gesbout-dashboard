@@ -53,16 +53,12 @@
 .toggleBtn {
   width: 34px;
   height: 34px;
-
   border: none;
   background: transparent;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 8px;
-
   cursor: pointer;
   transition: 0.2s;
   color: #667085;
@@ -91,4 +87,18 @@
 
 .cardBody {
   padding: 1.25rem;
+}
+
+@media (max-width: 520px) {
+  .cardBody {
+    padding: 1rem;
+  }
+
+  .cardHeader {
+    padding: 0.75rem 0.9rem;
+  }
+
+  .cardTitle {
+    font-size: 0.82rem;
+  }
 }

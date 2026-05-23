@@ -1,128 +1,254 @@
+.navBrandIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4e598c, #6a77aa);
+  color: white;
+  font-weight: 700;
+}
 .topnav {
-    background: white;
-    border-bottom: 1px solid #e2e6ef;
-    padding: 0 1.5rem;
-    height: 60px;
+  background: white;
+  border-bottom: 1px solid #e2e6ef;
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* ✅ allow text truncation inside flex */
+.navBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
 
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.brandText {
+  min-width: 0;
+}
+
+/* ✅ responsive title sizing + truncation */
+.navBrandName {
+  display: block;
+  color: #4e598c;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navBrandSub {
+  display: block;
+  font-size: 0.68rem;
+  color: #8892aa;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.navUser {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fcaf58, #ff8c42);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.golombeMark {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.875rem;
+  border-radius: 8px;
+  background: #eef0f8;
+  color: #4e598c;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.golombeRing {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #4e598c;
+  border-radius: 50%;
+  position: relative;
+}
+
+.golombeRing::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4e598c;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.adminName{
+  font-size: 0.88rem;
+  color: #4a5168;
+}
+
+.userMenu {
+  position: relative;
+}
+
+/* button resets + click target */
+.navUserBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  background: transparent;
+  border: 0;
+  padding: 0.25rem 0.35rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.navUserBtn:focus-visible {
+  outline: 3px solid rgba(78, 89, 140, 0.25);
+  outline-offset: 2px;
+}
+
+.navUserBtn:hover {
+  background: #f4f6fb;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 220px;
+  background: #fff;
+  border: 1px solid #e2e6ef;
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(25, 35, 60, 0.14);
+  z-index: 200;
+  overflow: hidden;
+  transform-origin: top right;
+  animation: pop 120ms ease-out;
+}
+
+@keyframes pop {
+  from { transform: scale(0.98); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.dropdownHeader {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.85rem 0.9rem;
+  align-items: center;
+}
+
+.dropdownAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fcaf58, #ff8c42);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dropdownText {
+  min-width: 0;
+}
+
+.dropdownName {
+  font-weight: 700;
+  color: #2f3750;
+  font-size: 0.92rem;
+  line-height: 1.1;
+}
+
+.dropdownSub {
+  font-size: 0.75rem;
+  color: #7b849f;
+  margin-top: 0.15rem;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #eef0f8;
+}
+
+.dropdownItemDanger {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 0.9rem;
+  background: white;
+  border: 0;
+  cursor: pointer;
+  color: #b42318;
+  font-weight: 700;
+}
+
+.dropdownItemDanger:hover {
+  background: #fff1f0;
+}
+
+/* optional: fullscreen click-catcher behind dropdown (nice on mobile) */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  border: 0;
+  z-index: 150;
+}
+
+@media (max-width: 520px) {
+  .topnav {
+    padding: 0 0.85rem;
+    height: 56px;
   }
 
-  .navBrand {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-  }
-
-  .navBrandIcon {
-    width: 36px;
-    height: 36px;
-
-    border-radius: 9px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: linear-gradient(135deg, #4e598c, #6a77aa);
-
-    color: white;
-    font-weight: 700;
-  }
-
-  .navBrandName {
-    display: block;
-    color: #4e598c;
-    font-weight: 700;
-  }
-
-  .navBrandSub {
-    display: block;
-    font-size: 0.68rem;
-    color: #8892aa;
-    text-transform: uppercase;
-  }
-
-  .navRight {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .navUser {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .navAvatar {
-    width: 32px;
-    height: 32px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: linear-gradient(135deg, #fcaf58, #ff8c42);
-
-    color: white;
-    font-size: 0.72rem;
-    font-weight: 700;
-  }
-
+  /* On very small screens, hide the "GOLOMBE" badge to save space */
   .golombeMark {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    padding: 0.4rem 0.875rem;
-
-    border-radius: 8px;
-
-    background: #eef0f8;
-
-    color: #4e598c;
-
-    font-size: 0.78rem;
-    font-weight: 700;
+    display: none;
   }
 
-  .golombeRing {
-    width: 22px;
-    height: 22px;
-
-    border: 3px solid #4e598c;
-    border-radius: 50%;
-
-    position: relative;
+  /* Hide subtitle for cleaner single-line branding */
+  .navBrandSub {
+    display: none;
   }
 
-  .golombeRing::after {
-    content: "";
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #4e598c;
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
+  /* Make admin name optional on small screens */
+  .adminName {
+    display: none;
   }
-
-  .adminName{
-    font-size: 0.88rem;
-    color: #4a5168;
-  }
+}
