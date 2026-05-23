@@ -88,6 +88,14 @@
   align-items: end;
 }
 
+@media (max-width: 520px) {
+  .filterGrid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+}
+
+
 .fgroup {
   display: flex;
   flex-direction: column;
