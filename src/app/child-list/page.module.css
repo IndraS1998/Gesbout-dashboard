@@ -1,0 +1,138 @@
+.page {
+    min-height: 100vh;
+    background: #f8f9fb;
+    color: #1e2235;
+    font-family: "DM Sans", sans-serif;
+}
+
+.main {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+  padding:.62rem 1.2rem;
+  border-radius:var(--radius-sm);
+  font-family:var(--font);
+  font-size:.85rem;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
+  transition:all .18s;
+  min-height:40px;
+  white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(135deg, var(--primary-main), var(--primary-light));
+  color:#fff;
+  box-shadow:0 4px 12px rgba(78,89,140,.28)}
+
+.btnOutline {
+  border: 1.5px solid #e2e6ef;
+  background: transparent;
+}
+
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  align-items: end;
+}
+
+@media (max-width: 520px) {
+  .filterGrid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+}
+
+.fgroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.flabel {
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #8892aa;
+}
+
+.finput,
+.fselect {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: .6rem .875rem;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-size: .875rem;
+  color: var(--gray-900);
+  background: var(--white);
+
+  min-height: 40px;
+  line-height: 1.2;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* ✅ iOS Safari fix for date inputs overflowing/ignoring width */
+.finput[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+
+  /* keeps it behaving like other inputs inside grid/flex */
+  display: block;
+
+  /* reduces chance of internal UI causing overflow */
+  padding-right: .6rem;
+}
+
+/* Optional: keep displayed date text aligned nicely on iOS */
+.finput[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.fselect:hover {
+  border-color: #6a77aa;
+}
+
+/* Focus ring for ALL inputs/selects */
+.finput:focus,
+.fselect:focus {
+  outline: none;
+  border-color: #4E598C;
+  box-shadow: 0 0 0 3px rgba(106, 119, 170, 0.25);
+}
+
+/* Select dropdown hover effect */
+.fselect option:hover,
+.fselect option:checked {
+  background-color: #6a77aa;
+  color: #fff;
+}
+
+.filterActions {
+  display: flex;
+  gap: 0.5rem;
+}
