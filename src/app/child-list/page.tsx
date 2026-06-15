@@ -1,77 +1,26 @@
 'use client';
 
-import { useState } from "react";
+import { useState,useEffect,useCallback } from "react";
+import {useRouter} from "next/navigation";
+import toast from 'react-hot-toast';
 import styles from "./page.module.css";
 import LoadingOverlay from "@/components/loadingOverlay/component";
 import Card from "@/components/card/components";
 import { useForm } from "react-hook-form";
 import Nav from "@/components/nav/component";
+import {Client} from "@/context/types";
+import {formatDate} from "@/context/utilityFunctions";
 
 type FilterForm = {
-  client: string;
+  client: Client;
 };
-
-type Sponsor = {
-  code: string;
-  nom: string;
-  telephone: string;
-  dateCreation: string;
-  totalChildren: number;
-};
-
-type Child = {
-  code: string;
-  nom: string;
-  telephone: string;
-  dateInscription: string;
-  statut: string;
-};
-
-const sponsors: Sponsor[] = [
-  {
-    code: "CL000123",
-    nom: "Jean Pierre Mbarga",
-    telephone: "699001122",
-    dateCreation: "2025-03-14",
-    totalChildren: 4,
-  },
-  {
-    code: "CL000124",
-    nom: "Paul Messi",
-    telephone: "677112244",
-    dateCreation: "2025-04-10",
-    totalChildren: 2,
-  },
-];
-
-const sponsor: Sponsor = sponsors[0];
-
-const children: Child[] = [
-  {
-    code: "CL000201",
-    nom: "Marie Ndzi",
-    telephone: "677112233",
-    dateInscription: "2025-04-01",
-    statut: "Actif",
-  },
-  {
-    code: "CL000202",
-    nom: "Paul Messi",
-    telephone: "695443322",
-    dateInscription: "2025-04-03",
-    statut: "Actif",
-  },
-  {
-    code: "CL000203",
-    nom: "Sandrine Foko",
-    telephone: "651223344",
-    dateInscription: "2025-04-09",
-    statut: "Inactif",
-  },
-];
 
 export default function ChildList() {
-  const [loading] = useState(false);
+  const [loading,setLoading] = useState(false);
+  const [clients,setClients] = useState<Client[]>([]);
+  const [sponsor,setSponsor] = useState<Client | null>(null);
+  const [children,setChildren] = useState<Client[]>([]);
+  const r = useRouter();
 
   const {
     register,
@@ -80,12 +29,77 @@ export default function ChildList() {
     formState: { errors },
   } = useForm<FilterForm>({
     defaultValues: {
-      client: "",
+      client: {},
     },
   });
 
+  const fetchClients = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        r.replace("/connexion");
+        return;
+      }
+
+      const response = await fetch("/api/protected/clients", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        toast.error('Connexion impossible, Vérifiez votre connexion internet puis réessayez ❌');
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        setClients(data.rows);
+      }
+    } catch (err) {
+      toast.error('Connexion impossible, Vérifiez votre connexion internet puis réessayez ❌');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [r]);
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
+
   const onSubmit = async (data: FilterForm) => {
-    console.log("Selected Client:", data.client);
+    console.log(data);
+    setLoading(true);
+    try {
+      const response = await fetch("/api/protected/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setSponsor(result.data.sponsor);
+        setChildren(result.data.children);
+      } else {
+        if(response.status == 500){
+          toast.error("Connexion impossible, Vérifiez votre connexion internet puis réessayez ❌")
+        }else{
+          toast.error("Erreur de connexion ❌");
+        }
+      }
+    } catch (error) {
+      toast.error("Connexion impossible. Vérifiez votre connexion internet puis réessayez ❌");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -132,10 +146,10 @@ export default function ChildList() {
                       Sélectionner un client
                     </option>
 
-                    {sponsors.map((client) => (
+                    {clients.map((client) => (
                       <option
-                        key={client.code}
-                        value={client.code}
+                        key={client.id_client}
+                        value={client.id_client}
                       >
                         {client.nom}
                       </option>
@@ -157,7 +171,7 @@ export default function ChildList() {
                     className={`${styles.btn} ${styles.btnOutline}`}
                     onClick={() =>
                       reset({
-                        client: "",
+                        client: {},
                       })
                     }
                   >
@@ -189,164 +203,177 @@ export default function ChildList() {
             </form>
           </Card>
 
-          {/* SPONSOR INFORMATION */}
-          <Card
-            title="Informations du Parrain"
-            subtitle="Détails du client sélectionné"
-            icon={
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            }
-          >
-            <div className="card-body collapse open">
-              <div className="info-grid">
-                <div className="info-item">
-                  <div className="ik">Code Client</div>
-                  <div className="iv">{sponsor.code}</div>
-                </div>
+          {sponsor && (<>
+            {/* SPONSOR INFORMATION */}
+            <Card
+              title="Informations du Parrain"
+              subtitle="Détails du client sélectionné"
+              icon={
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              }
+            >
+              <div className="card-body collapse open">
+                <div className="info-grid">
+                  <div className="info-item">
+                    <div className="ik">ID Client</div>
+                    <div className="iv">{sponsor?.id_client}</div>
+                  </div>
 
-                <div className="info-item">
-                  <div className="ik">Nom Complet</div>
-                  <div className="iv plain">
-                    {sponsor.nom}
+                  <div className="info-item">
+                    <div className="ik">Nom Complet</div>
+                    <div className="iv plain">
+                      {sponsor?.nom}
+                    </div>
                   </div>
-                </div>
 
-                <div className="info-item">
-                  <div className="ik">Téléphone</div>
-                  <div className="iv">
-                    {sponsor.telephone}
+                  <div className="info-item">
+                    <div className="ik">Téléphone</div>
+                    <div className="iv">
+                      {sponsor?.numtel}
+                    </div>
                   </div>
-                </div>
 
-                <div className="info-item">
-                  <div className="ik">
-                    Date Inscription
+                  <div className="info-item">
+                    <div className="ik">
+                      Date Inscription
+                    </div>
+                    <div className="iv">
+                      {formatDate(sponsor?.d_creation)}
+                    </div>
                   </div>
-                  <div className="iv">
-                    {sponsor.dateCreation}
-                  </div>
-                </div>
 
-                <div className="info-item">
-                  <div className="ik">
-                    Nombre de Filleuls
-                  </div>
-                  <div className="iv">
-                    <span className="badge b-blue">
-                      {sponsor.totalChildren}
-                    </span>
+                  <div className="info-item">
+                    <div className="ik">
+                      Nombre de Filleuls
+                    </div>
+                    <div className="iv">
+                      <span className="badge b-blue">
+                        {children.length}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          {/* CHILDREN TABLE */}
-          <Card
-            title="Liste des Filleuls"
-            subtitle={`${children.length} filleul(s) direct(s) enregistré(s)`}
-            icon={
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-            }
-          >
-            <div className="card-body collapse open">
-              <div className="tw">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Code Client</th>
-                      <th>Nom et Prénoms</th>
-                      <th>Téléphone</th>
-                      <th>Date Inscription</th>
-                      <th>Statut</th>
-                    </tr>
-                  </thead>
+            {/* CHILDREN TABLE */}
+            <Card
+              title="Liste des Filleuls"
+              subtitle={`${children.length} filleul(s) direct(s) enregistré(s)`}
+              icon={
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              }
+            >
+              <div className="card-body collapse open">
+                <div className="tw">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Code Client</th>
+                        <th>Nom et Prénoms</th>
+                        <th>Téléphone</th>
+                        <th>Date Inscription</th>
+                        <th>Statut</th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    {children.map((child) => (
-                      <tr key={child.code}>
-                        <td
-                          style={{
-                            fontFamily:
-                              "var(--font-mono)",
-                          }}
-                        >
-                          {child.code}
-                        </td>
+                    <tbody>
+                      {children.map((child) => (
+                        <tr key={child.id_client}>
+                          <td
+                            style={{
+                              fontFamily:
+                                "var(--font-mono)",
+                            }}
+                          >
+                            {child.id_client}
+                          </td>
 
-                        <td>{child.nom}</td>
+                          <td>{child.nom}</td>
 
-                        <td
-                          style={{
-                            fontFamily:
-                              "var(--font-mono)",
-                          }}
-                        >
-                          {child.telephone}
-                        </td>
+                          <td
+                            style={{
+                              fontFamily:
+                                "var(--font-mono)",
+                            }}
+                          >
+                            {child.numtel}
+                          </td>
 
-                        <td>
-                          {child.dateInscription}
-                        </td>
+                          <td>
+                            {formatDate(child.d_creation)}
+                          </td>
 
-                        <td>
-                          <span
-                            className={
-                              child.statut ===
-                              "Actif"
+                          <td>
+                            <span
+                              className={
+                                child.statut ===
+                                "Actif"
                                 ? "badge b-green"
                                 : "badge b-red"
-                            }
-                          >
-                            {child.statut}
-                          </span>
+                              }
+                            >
+                              {child.statut}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+
+                    <tfoot>
+                      <tr>
+                        <td
+                          className="lbl"
+                          colSpan={4}
+                        >
+                          Total des filleuls
+                        </td>
+
+                        <td>
+                          <strong>
+                            {children.length}
+                          </strong>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-
-                  <tfoot>
-                    <tr>
-                      <td
-                        className="lbl"
-                        colSpan={4}
-                      >
-                        Total des filleuls
-                      </td>
-
-                      <td>
-                        <strong>
-                          {children.length}
-                        </strong>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
+                    </tfoot>
+                  </table>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </>)}
+          {!sponsor && (<>
+              {/* PLACEHOLDER */}
+              <div className="card">
+                <div className="placeholder">
+                  <div className="ph-icon">📋</div>
+                  <div className="ph-title">Aucun client chargé</div>
+                  <div className="ph-text">Sélectionnez un client puis cliquez sur <strong>Rechercher</strong>.</div>
+                </div>
+              </div>
+            </>)
+          }
         </main>
       </div>
     </>
