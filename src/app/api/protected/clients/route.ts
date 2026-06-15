@@ -17,3 +17,21 @@ export async function GET() {
         }
     }
 }
+
+export async function POST(req: Request){
+    try{
+        const {client} = await req.json();
+        const [children,sponsorResult] = await Promise.all([
+            psql`SELECT * FROM public."client" WHERE ID_PARRAIN = ${client};`,
+            psql`SELECT * FROM public."client" WHERE ID_CLIENT = ${client}`
+        ]) ;
+        return NextResponse.json({success:true,status:200,data: {sponsor:sponsorResult[0],children}})
+    }catch(err){
+        console.log(err)
+        if(err instanceof Error){
+            return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+        }else{
+            return NextResponse.json({ success: false, error: "Unknown error" }, { status: 500 });
+        }
+    }
+}

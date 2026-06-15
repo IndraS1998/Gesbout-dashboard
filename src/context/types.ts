@@ -7,6 +7,7 @@ export type Client = {
     d_creation: string;
     numtel: string;
     numcompte: string;
+    statut: string;
 }
 
 export type Params = {

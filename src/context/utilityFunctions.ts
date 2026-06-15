@@ -16,3 +16,13 @@ export function insertCharacter(value: string):string{
 export function printDate(d:string):string{
   return moment(d).format('YYYY-MM-DD')
 }
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  return date.toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}

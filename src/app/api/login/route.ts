@@ -9,7 +9,6 @@ export async function POST(req: Request) {
   try {
     const { name } = await req.json();
     const [result]= await psql`SELECT LOGIN, NOM, PRENOM FROM public."user" WHERE LOGIN = ${name};`;
-    console.log(result);
 
     if (!process.env.JWT_SECRETKEY) {
       throw new Error("JWT_SECRET is not defined in environment variables.");

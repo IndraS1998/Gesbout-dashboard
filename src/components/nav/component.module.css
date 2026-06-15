@@ -19,9 +19,99 @@
   justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 300;
+}
+.navLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
 }
 
+.hamburger {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #4e598c;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+  border-radius: 8px;
+}
+
+.hamburger:hover {
+  background: #f4f6fb;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #667085;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.navLink:hover {
+  background: #f4f6fb;
+  color: #4e598c;
+}
+
+.navLinkActive {
+  background: #eef0f8;
+  color: #4e598c;
+}
+
+.mobileMenu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: white;
+  border-bottom: 1px solid #e2e6ef;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  z-index: 180;
+
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.mobileLink {
+  text-decoration: none;
+  color: #4a5168;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.mobileLink:hover {
+  background: #f4f6fb;
+}
+
+.mobileLinkActive {
+  background: #eef0f8;
+  color: #4e598c;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navLinks {
+    display: none;
+  }
+}
 /* ✅ allow text truncation inside flex */
 .navBrand {
   display: flex;
